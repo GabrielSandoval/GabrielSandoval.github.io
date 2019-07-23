@@ -1,8 +1,16 @@
 function setupBarChart(){
-  var margin = 100
-  var ymargin = 25
-  var width = 400
-  var height = 300
+  margin = {top: 10, right: 30, bottom: 120, left: 60}
+  width = 500 - margin.left - margin.right,
+  height = 400 - margin.top - margin.bottom;
+
+  barSvg = d3.select("#death-bar-chart")
+  .append("svg")
+  .attr("id", "barchart")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", `translate(${margin.left},${margin.top})`);
+
   var xdomain = [
     "Alzheimer's disease",
     "Cancer",
@@ -20,9 +28,19 @@ function setupBarChart(){
   var maxYear = Math.max(...deathByCauseByYear.map(function(d) { return d[2016] }));
   var bys = d3.scaleLinear().domain([0,maxYear]).range([height, 0])
 
-  var barchart = d3.select("#barchart").
+  barSvg.
+      append("g").
+      attr("id", "y-axis").
+      attr("transform", `translate(0,0)`).
+      attr("fill", "none").
+      attr("font-size", 10).
+      attr("font-family", "sans-serif").
+      attr("text-anchor", "end").
+      call(d3.axisLeft(bys));
+
+  var barchart = d3.select("svg#barchart").
     append("g").
-    attr("transform", `translate(${margin},${ymargin})`).
+    attr("transform", `translate(${margin.left},${margin.top})`).
     selectAll("rect").
     data(deathByCauseByYear).
     enter().
@@ -34,21 +52,11 @@ function setupBarChart(){
     style("fill", "lightblue").
     style("stroke", "black")
 
-    d3.select("svg#barchart").
-      append("g").
-      attr("id", "y-axis").
-      attr("transform", `translate(${margin},${ymargin})`).
-      attr("fill", "none").
-      attr("font-size", 10).
-      attr("font-family", "sans-serif").
-      attr("text-anchor", "end").
-      call(d3.axisLeft(bys));
-
   var years = d3.range(1999, 2017);
   years.forEach(function(year) {
     barchart = barchart.
       transition().duration(500).ease(d3.easeExp).
-      attr("y", function(d,i) { return prevY = bys(d[year]);}).
+      attr("y", function(d,i) { return bys(d[year]);}).
       attr("height", function(d, i){ return height - bys(d[year]);})
 
     barchart.end().then(function(){
@@ -56,7 +64,7 @@ function setupBarChart(){
       d3.select("svg#barchart").
         append("g").
         attr("id", "y-axis").
-        attr("transform", `translate(${margin},${ymargin})`).
+        attr("transform", `translate(0,${margin.top})`).
         attr("fill", "none").
         attr("font-size", 10).
         attr("font-family", "sans-serif").
@@ -65,9 +73,9 @@ function setupBarChart(){
     })
   });
 
-  d3.select("svg#barchart").
+  barSvg.
     append("g").
-    attr("transform", `translate(${margin},${height+ymargin})`).
+    attr("transform", `translate(0,${height})`).
     attr("fill", "none").
     attr("font-size", 10).
     attr("font-family", "sans-serif").
