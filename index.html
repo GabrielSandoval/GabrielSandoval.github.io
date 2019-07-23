@@ -19,62 +19,194 @@
         <p id="transition-header" class="center"> Total deaths in US by Cause (1998) </p>
         <svg id="barchart" width="600" height="500"></svg>
       </div>
-    </div>
-    <div class="pure-g">
       <div class="pure-u-24-24">
-        <p id="transition-header" class="center"> Total deaths in US by State (1998) </p>
-        <svg id="geochart" width="600" height="500"></svg>
+        <div id="linechart">
+        <select id="causeFilter">
+        </div>
       </div>
     </div>
-    <div class="pure-g">
-      <div class="pure-u-24-24">
-        <p id="transition-header" class="center"> Total deaths in US by State (1998) </p>
-        <svg id="linechart" width="600" height="500"></svg>
-      </div>
-    </div>
+  </body>
+  <script>
+    // set the dimensions and margins of the graph
+    var margin = {top: 10, right: 30, bottom: 50, left: 60},
+    width = 600 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-    <script>
-      var totalDeathRatePerYear = [28183.5, 28402.1, 27914.7, 27973.4, 28067.9, 28612.3, 29052.7, 29211.4, 30342.3, 30456.4, 31152.8, 32318.8, 32397.1, 33846.1, 34429.2, 34580.3, 35161.3, 35592.3[28183.5, 28402.1, 27914.7, 27973.4, 28067.9, 28612.3, 29052.7, 29211.4, 30342.3, 30456.4, 31152.8, 32318.8, 32397.1, 33846.1, 34429.2, 34580.3, 35161.3, 35592.3]
+    var svg = d3.select("#linechart")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    </script>
+    var deathRatePerYear = [{"year":1999, "rate":69.7888}, {"year":2000, "rate":68.9437}, {"year":2001, "rate":67.8045}, {"year":2002, "rate":67.5082}, {"year":2003, "rate":66.3649}, {"year":2004, "rate":63.5237}, {"year":2005, "rate":63.3702}, {"year":2006, "rate":61.0839}, {"year":2007, "rate":59.7184}, {"year":2008, "rate":59.4947}, {"year":2009, "rate":57.2773}, {"year":2010, "rate":56.9661}, {"year":2011, "rate":56.1025}, {"year":2012, "rate":55.0351}, {"year":2013, "rate":54.8498}, {"year":2014, "rate":54.7347}, {"year":2015, "rate":55.6904}, {"year":2016, "rate":55.2618}]
+    var deathRatePerYearPerCause = [{"year":1999, "cause":"Alzheimer's disease", "rate":17.5039}, {"year":1999, "cause":"Cancer", "rate":201.4627}, {"year":1999, "cause":"CLRD", "rate":47.049}, {"year":1999, "cause":"Diabetes", "rate":25.5647}, {"year":1999, "cause":"Heart disease", "rate":256.0667}, {"year":1999, "cause":"Influenza and pneumonia", "rate":24.2941}, {"year":1999, "cause":"Kidney disease", "rate":13.0314}, {"year":1999, "cause":"Stroke", "rate":62.8588}, {"year":1999, "cause":"Suicide", "rate":11.7627}, {"year":1999, "cause":"Unintentional injuries", "rate":38.2941}, {"year":2000, "cause":"Alzheimer's disease", "rate":19.5137}, {"year":2000, "cause":"Cancer", "rate":200.1882}, {"year":2000, "cause":"CLRD", "rate":45.8118}, {"year":2000, "cause":"Diabetes", "rate":25.5902}, {"year":2000, "cause":"Heart disease", "rate":249.5922}, {"year":2000, "cause":"Influenza and pneumonia", "rate":23.2471}, {"year":2000, "cause":"Kidney disease", "rate":13.7529}, {"year":2000, "cause":"Stroke", "rate":61.5863}, {"year":2000, "cause":"Suicide", "rate":11.7078}, {"year":2000, "cause":"Unintentional injuries", "rate":38.4471}, {"year":2001, "cause":"Alzheimer's disease", "rate":20.802}, {"year":2001, "cause":"Cancer", "rate":197.7569}, {"year":2001, "cause":"CLRD", "rate":45.5098}, {"year":2001, "cause":"Diabetes", "rate":25.8471}, {"year":2001, "cause":"Heart disease", "rate":241.8706}, {"year":2001, "cause":"Influenza and pneumonia", "rate":21.5176}, {"year":2001, "cause":"Kidney disease", "rate":14.151}, {"year":2001, "cause":"Stroke", "rate":59.2098}, {"year":2001, "cause":"Suicide", "rate":12.1275}, {"year":2001, "cause":"Unintentional injuries", "rate":39.2529}, {"year":2002, "cause":"Alzheimer's disease", "rate":22.6294}, {"year":2002, "cause":"Cancer", "rate":195.0098}, {"year":2002, "cause":"CLRD", "rate":45.8157}, {"year":2002, "cause":"Diabetes", "rate":26.1784}, {"year":2002, "cause":"Heart disease", "rate":237.0255}, {"year":2002, "cause":"Influenza and pneumonia", "rate":22.998}, {"year":2002, "cause":"Kidney disease", "rate":14.3686}, {"year":2002, "cause":"Stroke", "rate":58.2941}, {"year":2002, "cause":"Suicide", "rate":12.3392}, {"year":2002, "cause":"Unintentional injuries", "rate":40.4235}, {"year":2003, "cause":"Alzheimer's disease", "rate":23.4686}, {"year":2003, "cause":"Cancer", "rate":191.9843}, {"year":2003, "cause":"CLRD", "rate":45.4333}, {"year":2003, "cause":"Diabetes", "rate":26.0843}, {"year":2003, "cause":"Heart disease", "rate":230.1941}, {"year":2003, "cause":"Influenza and pneumonia", "rate":22.7078}, {"year":2003, "cause":"Kidney disease", "rate":14.7275}, {"year":2003, "cause":"Stroke", "rate":55.6431}, {"year":2003, "cause":"Suicide", "rate":12.2157}, {"year":2003, "cause":"Unintentional injuries", "rate":41.1902}, {"year":2004, "cause":"Alzheimer's disease", "rate":23.8176}, {"year":2004, "cause":"Cancer", "rate":187.6804}, {"year":2004, "cause":"CLRD", "rate":43.2275}, {"year":2004, "cause":"Diabetes", "rate":25.2196}, {"year":2004, "cause":"Heart disease", "rate":215.502}, {"year":2004, "cause":"Influenza and pneumonia", "rate":19.7725}, {"year":2004, "cause":"Kidney disease", "rate":14.5863}, {"year":2004, "cause":"Stroke", "rate":51.5608}, {"year":2004, "cause":"Suicide", "rate":12.3725}, {"year":2004, "cause":"Unintentional injuries", "rate":41.498}, {"year":2005, "cause":"Alzheimer's disease", "rate":25.2255}, {"year":2005, "cause":"Cancer", "rate":186.1941}, {"year":2005, "cause":"CLRD", "rate":45.9765}, {"year":2005, "cause":"Diabetes", "rate":25.3706}, {"year":2005, "cause":"Heart disease", "rate":211.5255}, {"year":2005, "cause":"Influenza and pneumonia", "rate":20.8255}, {"year":2005, "cause":"Kidney disease", "rate":14.651}, {"year":2005, "cause":"Stroke", "rate":48.7941}, {"year":2005, "cause":"Suicide", "rate":12.3078}, {"year":2005, "cause":"Unintentional injuries", "rate":42.8314}, {"year":2006, "cause":"Alzheimer's disease", "rate":24.9294}, {"year":2006, "cause":"Cancer", "rate":183.0275}, {"year":2006, "cause":"CLRD", "rate":42.8824}, {"year":2006, "cause":"Diabetes", "rate":24.0588}, {"year":2006, "cause":"Heart disease", "rate":201.298}, {"year":2006, "cause":"Influenza and pneumonia", "rate":18.1098}, {"year":2006, "cause":"Kidney disease", "rate":14.898}, {"year":2006, "cause":"Stroke", "rate":45.4294}, {"year":2006, "cause":"Suicide", "rate":12.4098}, {"year":2006, "cause":"Unintentional injuries", "rate":43.7961}, {"year":2007, "cause":"Alzheimer's disease", "rate":25.3588}, {"year":2007, "cause":"Cancer", "rate":180.9745}, {"year":2007, "cause":"CLRD", "rate":43.102}, {"year":2007, "cause":"Diabetes", "rate":23.4765}, {"year":2007, "cause":"Heart disease", "rate":192.3667}, {"year":2007, "cause":"Influenza and pneumonia", "rate":16.7373}, {"year":2007, "cause":"Kidney disease", "rate":14.8608}, {"year":2007, "cause":"Stroke", "rate":43.898}, {"year":2007, "cause":"Suicide", "rate":12.6588}, {"year":2007, "cause":"Unintentional injuries", "rate":43.751}, {"year":2008, "cause":"Alzheimer's disease", "rate":26.9255}, {"year":2008, "cause":"Cancer", "rate":177.8608}, {"year":2008, "cause":"CLRD", "rate":46.9098}, {"year":2008, "cause":"Diabetes", "rate":22.5294}, {"year":2008, "cause":"Heart disease", "rate":188.5196}, {"year":2008, "cause":"Influenza and pneumonia", "rate":17.6627}, {"year":2008, "cause":"Kidney disease", "rate":15.3804}, {"year":2008, "cause":"Stroke", "rate":42.7314}, {"year":2008, "cause":"Suicide", "rate":13.1412}, {"year":2008, "cause":"Unintentional injuries", "rate":43.2863}, {"year":2009, "cause":"Alzheimer's disease", "rate":25.1549}, {"year":2009, "cause":"Cancer", "rate":174.5412}, {"year":2009, "cause":"CLRD", "rate":44.9824}, {"year":2009, "cause":"Diabetes", "rate":21.5471}, {"year":2009, "cause":"Heart disease", "rate":180.1157}, {"year":2009, "cause":"Influenza and pneumonia", "rate":16.4529}, {"year":2009, "cause":"Kidney disease", "rate":15.198}, {"year":2009, "cause":"Stroke", "rate":40.4706}, {"year":2009, "cause":"Suicide", "rate":13.149}, {"year":2009, "cause":"Unintentional injuries", "rate":41.1608}, {"year":2010, "cause":"Alzheimer's disease", "rate":26.1588}, {"year":2010, "cause":"Cancer", "rate":174.5471}, {"year":2010, "cause":"CLRD", "rate":44.351}, {"year":2010, "cause":"Diabetes", "rate":21.3471}, {"year":2010, "cause":"Heart disease", "rate":176.7804}, {"year":2010, "cause":"Influenza and pneumonia", "rate":15.1882}, {"year":2010, "cause":"Kidney disease", "rate":15.4255}, {"year":2010, "cause":"Stroke", "rate":39.9118}, {"year":2010, "cause":"Suicide", "rate":13.8235}, {"year":2010, "cause":"Unintentional injuries", "rate":42.1275}, {"year":2011, "cause":"Alzheimer's disease", "rate":25.8588}, {"year":2011, "cause":"Cancer", "rate":171.1176}, {"year":2011, "cause":"CLRD", "rate":44.8882}, {"year":2011, "cause":"Diabetes", "rate":22.2}, {"year":2011, "cause":"Heart disease", "rate":171.6294}, {"year":2011, "cause":"Influenza and pneumonia", "rate":15.8392}, {"year":2011, "cause":"Kidney disease", "rate":13.6059}, {"year":2011, "cause":"Stroke", "rate":38.6078}, {"year":2011, "cause":"Suicide", "rate":13.9706}, {"year":2011, "cause":"Unintentional injuries", "rate":43.3078}, {"year":2012, "cause":"Alzheimer's disease", "rate":24.9275}, {"year":2012, "cause":"Cancer", "rate":167.7902}, {"year":2012, "cause":"CLRD", "rate":43.5824}, {"year":2012, "cause":"Diabetes", "rate":21.4725}, {"year":2012, "cause":"Heart disease", "rate":169.6314}, {"year":2012, "cause":"Influenza and pneumonia", "rate":14.4588}, {"year":2012, "cause":"Kidney disease", "rate":13.0686}, {"year":2012, "cause":"Stroke", "rate":37.5686}, {"year":2012, "cause":"Suicide", "rate":14.4471}, {"year":2012, "cause":"Unintentional injuries", "rate":43.4039}, {"year":2013, "cause":"Alzheimer's disease", "rate":24.2412}, {"year":2013, "cause":"Cancer", "rate":165.2706}, {"year":2013, "cause":"CLRD", "rate":44.2431}, {"year":2013, "cause":"Diabetes", "rate":21.402}, {"year":2013, "cause":"Heart disease", "rate":169.0608}, {"year":2013, "cause":"Influenza and pneumonia", "rate":16.1157}, {"year":2013, "cause":"Kidney disease", "rate":13.2745}, {"year":2013, "cause":"Stroke", "rate":36.6471}, {"year":2013, "cause":"Suicide", "rate":14.4373}, {"year":2013, "cause":"Unintentional injuries", "rate":43.8059}, {"year":2014, "cause":"Alzheimer's disease", "rate":26.1373}, {"year":2014, "cause":"Cancer", "rate":163.8118}, {"year":2014, "cause":"CLRD", "rate":43.0157}, {"year":2014, "cause":"Diabetes", "rate":21.1843}, {"year":2014, "cause":"Heart disease", "rate":167.7549}, {"year":2014, "cause":"Influenza and pneumonia", "rate":15.4608}, {"year":2014, "cause":"Kidney disease", "rate":13.1588}, {"year":2014, "cause":"Stroke", "rate":36.7941}, {"year":2014, "cause":"Suicide", "rate":14.9059}, {"year":2014, "cause":"Unintentional injuries", "rate":45.1235}, {"year":2015, "cause":"Alzheimer's disease", "rate":29.951}, {"year":2015, "cause":"Cancer", "rate":161.3235}, {"year":2015, "cause":"CLRD", "rate":44.3706}, {"year":2015, "cause":"Diabetes", "rate":22.0843}, {"year":2015, "cause":"Heart disease", "rate":168.8569}, {"year":2015, "cause":"Influenza and pneumonia", "rate":15.8882}, {"year":2015, "cause":"Kidney disease", "rate":13.3314}, {"year":2015, "cause":"Stroke", "rate":37.498}, {"year":2015, "cause":"Suicide", "rate":15.4235}, {"year":2015, "cause":"Unintentional injuries", "rate":48.1765}, {"year":2016, "cause":"Alzheimer's disease", "rate":30.9255}, {"year":2016, "cause":"Cancer", "rate":158.151}, {"year":2016, "cause":"CLRD", "rate":43.1627}, {"year":2016, "cause":"Diabetes", "rate":21.5059}, {"year":2016, "cause":"Heart disease", "rate":166.9706}, {"year":2016, "cause":"Influenza and pneumonia", "rate":13.7294}, {"year":2016, "cause":"Kidney disease", "rate":13.0588}, {"year":2016, "cause":"Stroke", "rate":37.1627}, {"year":2016, "cause":"Suicide", "rate":15.5843}, {"year":2016, "cause":"Unintentional injuries", "rate":52.3667}]
 
-    <script>
-      var margin = 100
-      var ymargin = 25
-      var width = 400
-      var height = 300
-      var xdomain = [
-        "Alzheimer's disease",
-        "Cancer",
-        "CLRD",
-        "Diabetes",
-        "Heart disease",
-        "Influenza and pneumonia",
-        "Kidney disease",
-        "Stroke",
-        "Suicide",
-        "Unintentional injuries"
-      ]
-      var xs = d3.scaleBand().domain(xdomain).range([0, width])
-      var data = [{"1999":44536.0, "2000":94094.0, "2001":147946.0, "2002":206812.0, "2003":270269.0, "2004":336234.0, "2005":407833.0, "2006":480265.0, "2007":554897.0, "2008":637332.0, "2009":716335.0, "2010":799829.0, "2011":884803.0, "2012":968440.0, "2013":1053207.0, "2014":1146748.0, "2015":1257309.0, "2016":1373412.0}, {"1999":549838.0, "2000":1102929.0, "2001":1656697.0, "2002":2213968.0, "2003":2770870.0, "2004":3324758.0, "2005":3884070.0, "2006":4443958.0, "2007":5006833.0, "2008":5572302.0, "2009":6139930.0, "2010":6714673.0, "2011":7291364.0, "2012":7873987.0, "2013":8458868.0, "2014":9050568.0, "2015":9646498.0, "2016":10244536.0}, {"1999":124181.0, "2000":246190.0, "2001":369203.0, "2002":494019.0, "2003":620401.0, "2004":742388.0, "2005":873321.0, "2006":997904.0, "2007":1125828.0, "2008":1266918.0, "2009":1404271.0, "2010":1542351.0, "2011":1685294.0, "2012":1828783.0, "2013":1977988.0, "2014":2125089.0, "2015":2280130.0, "2016":2434726.0}, {"1999":68399.0, "2000":137700.0, "2001":209072.0, "2002":282321.0, "2003":356540.0, "2004":429678.0, "2005":504797.0, "2006":577246.0, "2007":648628.0, "2008":719181.0, "2009":787886.0, "2010":856957.0, "2011":930788.0, "2012":1004720.0, "2013":1080298.0, "2014":1156786.0, "2015":1236321.0, "2016":1316379.0}, {"1999":725192.0, "2000":1435952.0, "2001":2136094.0, "2002":2833041.0, "2003":3518130.0, "2004":4170616.0, "2005":4822707.0, "2006":5454343.0, "2007":6070410.0, "2008":6687238.0, "2009":7286651.0, "2010":7884340.0, "2011":8480917.0, "2012":9080628.0, "2013":9691733.0, "2014":10306081.0, "2015":10939923.0, "2016":11575183.0}, {"1999":63730.0, "2000":129043.0, "2001":191077.0, "2002":256758.0, "2003":321921.0, "2004":381585.0, "2005":444586.0, "2006":500912.0, "2007":553629.0, "2008":609913.0, "2009":663605.0, "2010":713702.0, "2011":767528.0, "2012":818164.0, "2013":875143.0, "2014":930370.0, "2015":987432.0, "2016":1038969.0}, {"1999":35525.0, "2000":72776.0, "2001":112256.0, "2002":153230.0, "2003":195683.0, "2004":238163.0, "2005":282064.0, "2006":327408.0, "2007":373856.0, "2008":422093.0, "2009":471028.0, "2010":521504.0, "2011":567095.0, "2012":612717.0, "2013":659829.0, "2014":707975.0, "2015":757934.0, "2016":807980.0}, {"1999":167366.0, "2000":335027.0, "2001":498565.0, "2002":661237.0, "2003":818926.0, "2004":969000.0, "2005":1112579.0, "2006":1249698.0, "2007":1385650.0, "2008":1519798.0, "2009":1648640.0, "2010":1778116.0, "2011":1907048.0, "2012":2035594.0, "2013":2164572.0, "2014":2297675.0, "2015":2437998.0, "2016":2580140.0}, {"1999":29199.0, "2000":58549.0, "2001":89171.0, "2002":120826.0, "2003":152310.0, "2004":184749.0, "2005":217386.0, "2006":250686.0, "2007":285284.0, "2008":321319.0, "2009":358228.0, "2010":396592.0, "2011":436110.0, "2012":476710.0, "2013":517859.0, "2014":560685.0, "2015":604878.0, "2016":649843.0}, {"1999":97860.0, "2000":195760.0, "2001":297297.0, "2002":404039.0, "2003":513316.0, "2004":625328.0, "2005":743137.0, "2006":864736.0, "2007":988442.0, "2008":1110344.0, "2009":1228365.0, "2010":1349224.0, "2011":1475662.0, "2012":1603454.0, "2013":1734011.0, "2014":1869939.0, "2015":2016510.0, "2016":2177884.0}]
-      var maxYear = Math.max(...data.map(function(d) { return d[1999] }));
-      var ys = d3.scaleLinear().domain([0,maxYear]).range([height, 0])
+    var allCauses = d3.map(deathRatePerYearPerCause, function(d){return(d.cause)}).keys()
+    allCauses.unshift("All")
 
-      var barchart = d3.select("#barchart").
+    d3.select("#causeFilter")
+    .selectAll('myOptions')
+    .data(allCauses)
+    .enter()
+    .append('option')
+    .text(function (d) { return d; }) // text showed in the menu
+    .attr("value", function (d) { return d; })
+
+    var myColor = d3.scaleOrdinal()
+      .domain(allCauses)
+      .range(d3.schemeSet2);
+
+    // X-axis
+    var lxs = d3.scaleBand().domain(deathRatePerYear.map(function(d) { return d.year })).range([0, width])
+    svg.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .attr("fill", "none")
+      .attr("font-size", 10)
+      .attr("font-family", "sans-serif")
+      .attr("text-anchor", "end")
+      .call(d3.axisBottom(lxs))
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-1em")
+      .attr("dy", "-0.7em")
+      .attr("transform", "rotate(-90)");
+
+    var maxValue = Math.max(...deathRatePerYearPerCause.map(function(d) { return d.rate }));
+    var lys = d3.scaleLinear().domain([0,maxValue]).range([height, 0]);
+    svg.append("g")
+      .attr("fill", "none")
+      .attr("font-size", 10)
+      .attr("font-family", "sans-serif")
+      .attr("text-anchor", "end")
+      .call(d3.axisLeft(lys));
+
+    var line = svg.append('g')
+      .append("path")
+      .datum(deathRatePerYear)
+      .attr("d", d3.line()
+        .x(function(d) { return 15+lxs(d.year) })
+        .y(function(d) { return lys(d.rate) })
+      )
+      .attr("stroke", function(d){ return myColor("All") })
+      .style("stroke-width", 4)
+      .style("fill", "none")
+
+    var circles = svg.append("g")
+        .selectAll(".dot")
+        .data(deathRatePerYear)
+        .enter().append("circle") // Uses the enter().append() method
+        .attr("class", "dot") // Assign a class for styling
+        .attr("cx", function(d) { return 15+lxs(d.year) })
+        .attr("cy", function(d) { return lys(d.rate) })
+        .attr("r", 3)
+
+    function update(selectedCause) {
+      // Create new data with the selection?
+      if (selectedCause == "All") {
+        var dataFilter = deathRatePerYear
+      }
+      else {
+        var dataFilter = deathRatePerYearPerCause.filter(function(d){return d.cause==selectedCause})
+      }
+
+      // Give these new data to update line
+      line
+        .datum(dataFilter)
+        .transition()
+        .duration(1000)
+        .attr("d", d3.line()
+        .x(function(d) { return 15+lxs(d.year) })
+        .y(function(d) { return lys(d.rate) })
+        )
+        .attr("stroke", function(d){ return myColor(selectedCause) })
+
+      svg
+        .selectAll("circle")
+        .data(dataFilter)
+        .transition()
+        .duration(1000)
+        .attr("cx", function(d) { return 15+lxs(d.year) })
+        .attr("cy", function(d) { return lys(d.rate) })
+        .attr("r", 3)
+    }
+
+    // When the button is changed, run the updateChart function
+    d3.select("#causeFilter").on("change", function(d) {
+      // recover the option that has been chosen
+      var selectedOption = d3.select(this).property("value")
+      // run the updateChart function with this selected option
+      update(selectedOption)
+    })
+  </script>
+
+  <script>
+    var margin = 100
+    var ymargin = 25
+    var width = 400
+    var height = 300
+    var xdomain = [
+      "Alzheimer's disease",
+      "Cancer",
+      "CLRD",
+      "Diabetes",
+      "Heart disease",
+      "Influenza and pneumonia",
+      "Kidney disease",
+      "Stroke",
+      "Suicide",
+      "Unintentional injuries"
+    ]
+    var bxs = d3.scaleBand().domain(xdomain).range([0, width])
+    var deathByCauseByYear = [{"1999":44536.0, "2000":94094.0, "2001":147946.0, "2002":206812.0, "2003":270269.0, "2004":336234.0, "2005":407833.0, "2006":480265.0, "2007":554897.0, "2008":637332.0, "2009":716335.0, "2010":799829.0, "2011":884803.0, "2012":968440.0, "2013":1053207.0, "2014":1146748.0, "2015":1257309.0, "2016":1373412.0}, {"1999":549838.0, "2000":1102929.0, "2001":1656697.0, "2002":2213968.0, "2003":2770870.0, "2004":3324758.0, "2005":3884070.0, "2006":4443958.0, "2007":5006833.0, "2008":5572302.0, "2009":6139930.0, "2010":6714673.0, "2011":7291364.0, "2012":7873987.0, "2013":8458868.0, "2014":9050568.0, "2015":9646498.0, "2016":10244536.0}, {"1999":124181.0, "2000":246190.0, "2001":369203.0, "2002":494019.0, "2003":620401.0, "2004":742388.0, "2005":873321.0, "2006":997904.0, "2007":1125828.0, "2008":1266918.0, "2009":1404271.0, "2010":1542351.0, "2011":1685294.0, "2012":1828783.0, "2013":1977988.0, "2014":2125089.0, "2015":2280130.0, "2016":2434726.0}, {"1999":68399.0, "2000":137700.0, "2001":209072.0, "2002":282321.0, "2003":356540.0, "2004":429678.0, "2005":504797.0, "2006":577246.0, "2007":648628.0, "2008":719181.0, "2009":787886.0, "2010":856957.0, "2011":930788.0, "2012":1004720.0, "2013":1080298.0, "2014":1156786.0, "2015":1236321.0, "2016":1316379.0}, {"1999":725192.0, "2000":1435952.0, "2001":2136094.0, "2002":2833041.0, "2003":3518130.0, "2004":4170616.0, "2005":4822707.0, "2006":5454343.0, "2007":6070410.0, "2008":6687238.0, "2009":7286651.0, "2010":7884340.0, "2011":8480917.0, "2012":9080628.0, "2013":9691733.0, "2014":10306081.0, "2015":10939923.0, "2016":11575183.0}, {"1999":63730.0, "2000":129043.0, "2001":191077.0, "2002":256758.0, "2003":321921.0, "2004":381585.0, "2005":444586.0, "2006":500912.0, "2007":553629.0, "2008":609913.0, "2009":663605.0, "2010":713702.0, "2011":767528.0, "2012":818164.0, "2013":875143.0, "2014":930370.0, "2015":987432.0, "2016":1038969.0}, {"1999":35525.0, "2000":72776.0, "2001":112256.0, "2002":153230.0, "2003":195683.0, "2004":238163.0, "2005":282064.0, "2006":327408.0, "2007":373856.0, "2008":422093.0, "2009":471028.0, "2010":521504.0, "2011":567095.0, "2012":612717.0, "2013":659829.0, "2014":707975.0, "2015":757934.0, "2016":807980.0}, {"1999":167366.0, "2000":335027.0, "2001":498565.0, "2002":661237.0, "2003":818926.0, "2004":969000.0, "2005":1112579.0, "2006":1249698.0, "2007":1385650.0, "2008":1519798.0, "2009":1648640.0, "2010":1778116.0, "2011":1907048.0, "2012":2035594.0, "2013":2164572.0, "2014":2297675.0, "2015":2437998.0, "2016":2580140.0}, {"1999":29199.0, "2000":58549.0, "2001":89171.0, "2002":120826.0, "2003":152310.0, "2004":184749.0, "2005":217386.0, "2006":250686.0, "2007":285284.0, "2008":321319.0, "2009":358228.0, "2010":396592.0, "2011":436110.0, "2012":476710.0, "2013":517859.0, "2014":560685.0, "2015":604878.0, "2016":649843.0}, {"1999":97860.0, "2000":195760.0, "2001":297297.0, "2002":404039.0, "2003":513316.0, "2004":625328.0, "2005":743137.0, "2006":864736.0, "2007":988442.0, "2008":1110344.0, "2009":1228365.0, "2010":1349224.0, "2011":1475662.0, "2012":1603454.0, "2013":1734011.0, "2014":1869939.0, "2015":2016510.0, "2016":2177884.0}]
+    var maxYear = Math.max(...deathByCauseByYear.map(function(d) { return d[1999] }));
+    var bys = d3.scaleLinear().domain([0,maxYear]).range([height, 0])
+
+    var barchart = d3.select("#barchart").
+      append("g").
+      attr("transform", `translate(${margin},${ymargin})`).
+      selectAll("rect").
+      data(deathByCauseByYear).
+      enter().
+      append("rect").
+      attr("x", function(d,i) {return i*bxs(xdomain[1]);}).
+      attr("width", function(d, i) { return bxs.bandwidth()}).
+      attr("y", function(d,i) { return bys(0);}).
+      attr("height", function(d, i){ return 0;}).
+      style("fill", "lightblue").
+      style("stroke", "black")
+
+      d3.select("svg#barchart").
         append("g").
+        attr("id", "y-axis").
         attr("transform", `translate(${margin},${ymargin})`).
-        selectAll("rect").
-        data(data).
-        enter().
-        append("rect").
-        attr("x", function(d,i) {return i*xs(xdomain[1]);}).
-        attr("width", function(d, i) { return xs.bandwidth()}).
-        attr("y", function(d,i) { return ys(0);}).
-        attr("height", function(d, i){ return 0;}).
-        style("fill", "lightblue").
-        style("stroke", "black")
+        attr("fill", "none").
+        attr("font-size", 10).
+        attr("font-family", "sans-serif").
+        attr("text-anchor", "end").
+        call(d3.axisLeft(bys));
 
-        d3.select("svg").
+    var years = d3.range(1999, 2017);
+
+    years.forEach(function(year) {
+      var maxYear = Math.max(...deathByCauseByYear.map(function(d) { return d[year] }));
+      bys = d3.scaleLinear().domain([0,maxYear]).range([height, 0])
+      barchart = barchart.
+        transition().duration(750).ease(d3.easeLinear).
+        attr("y", function(d,i) { return prevY = bys(d[year]);}).
+        attr("height", function(d, i){ return height - bys(d[year]);})
+
+      barchart.end().then(function(){
+        yAxis = document.getElementById("y-axis")
+        if(yAxis != null){
+          yAxis.remove()
+        }
+
+        var maxYear = Math.max(...deathByCauseByYear.map(function(d) { return d[year] }));
+        bys = d3.scaleLinear().domain([0,maxYear]).range([height, 0])
+
+        document.getElementById("transition-header").textContent = `Total deaths in US by Cause (1998 - ${year})`
+        d3.select("svg#barchart").
           append("g").
           attr("id", "y-axis").
           attr("transform", `translate(${margin},${ymargin})`).
@@ -82,53 +214,22 @@
           attr("font-size", 10).
           attr("font-family", "sans-serif").
           attr("text-anchor", "end").
-          call(d3.axisLeft(ys));
+          call(d3.axisLeft(bys));
+      })
+    });
 
-      var years = d3.range(1999, 2017);
-
-      years.forEach(function(year) {
-        var maxYear = Math.max(...data.map(function(d) { return d[year] }));
-        ys = d3.scaleLinear().domain([0,maxYear]).range([height, 0])
-        barchart = barchart.
-          transition().duration(750).ease(d3.easeLinear).
-          attr("y", function(d,i) { return prevY = ys(d[year]);}).
-          attr("height", function(d, i){ return height - ys(d[year]);})
-
-        barchart.end().then(function(){
-          yAxis = document.getElementById("y-axis")
-          if(yAxis != null){
-            yAxis.remove()
-          }
-
-          var maxYear = Math.max(...data.map(function(d) { return d[year] }));
-          ys = d3.scaleLinear().domain([0,maxYear]).range([height, 0])
-
-          document.getElementById("transition-header").textContent = `Total deaths in US by Cause (1998 - ${year})`
-          d3.select("svg").
-            append("g").
-            attr("id", "y-axis").
-            attr("transform", `translate(${margin},${ymargin})`).
-            attr("fill", "none").
-            attr("font-size", 10).
-            attr("font-family", "sans-serif").
-            attr("text-anchor", "end").
-            call(d3.axisLeft(ys));
-        })
-      });
-
-      d3.select("svg").
-        append("g").
-        attr("transform", `translate(${margin},${height+ymargin})`).
-        attr("fill", "none").
-        attr("font-size", 10).
-        attr("font-family", "sans-serif").
-        attr("text-anchor", "end").
-        call(d3.axisBottom(xs)).
-        selectAll("text").
-        style("text-anchor", "end").
-        attr("dx", "-.8em").
-        attr("dy", ".15em").
-        attr("transform", "rotate(-90)")
-    </script>
-  </body>
+    d3.select("svg#barchart").
+      append("g").
+      attr("transform", `translate(${margin},${height+ymargin})`).
+      attr("fill", "none").
+      attr("font-size", 10).
+      attr("font-family", "sans-serif").
+      attr("text-anchor", "end").
+      call(d3.axisBottom(bxs)).
+      selectAll("text").
+      style("text-anchor", "end").
+      attr("dx", "-.8em").
+      attr("dy", ".15em").
+      attr("transform", "rotate(-90)")
+  </script>
 </html>
