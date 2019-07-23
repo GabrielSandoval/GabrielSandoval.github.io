@@ -70,6 +70,10 @@ function setupBarChart(){
         attr("font-family", "sans-serif").
         attr("text-anchor", "end").
         call(d3.axisLeft(bys));
+
+      if(year == 2016) {
+        document.getElementById("barReset").disabled = false
+      }
     })
   });
 

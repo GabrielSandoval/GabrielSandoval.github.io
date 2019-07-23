@@ -34,15 +34,20 @@
         <div id="death-bar-chart">
       </div>
       <div class="pure-u-24-24">
+        <button id="barReset" onclick="refreshBarChart()" disabled> Replay </button>
+      </div>
+      <div class="pure-u-24-24">
         <select id="causeFilter">
       </div>
     </div>
   </body>
   <script>
     setupBarChart()
+    initLineCharts()
+
     function refreshBarChart(){
       d3.select("svg#barchart").remove()
+      setupBarChart()
     }
-    initLineCharts()
   </script>
 </html>
