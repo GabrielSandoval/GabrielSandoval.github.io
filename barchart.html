@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title> Gabriel Sandoval </title>
+    <script src="js/d3.min.js"></script>
+    <style>
+      rect:hover {
+        fill-opacity: .7;
+      }
+      div.tooltip {
+        position: absolute;
+        text-align: left;
+        width: 200px;
+        height: 130px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        font: 12px sans-serif;
+        background: #fee467;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id='barchart-count-header'> Total deaths in US by Cause (2016) </h1>
+    <div id="death-bar-count"></div>
+
+    <h1 id='barchart-c-count-header'> Total deaths in US by Cause (1998 - 2016) </h1>
+    <div id="death-bar-cummulative-count"></div>
+    <div class="pure-u-24-24">
+      <select id="yearFilter">
+    </div>
+  </body>
+  <script>
+    function setupBarChart(){
+      margin = {top: 10, right: 30, bottom: 120, left: 60}
+      width = 500 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+
+      currentYear = 2016;
+      barData = [{"cause":"Alzheimer's disease", "year":1999, "runningSum":44536.0, "count":44536}, {"cause":"Cancer", "year":1999, "runningSum":549838.0, "count":549838}, {"cause":"CLRD", "year":1999, "runningSum":124181.0, "count":124181}, {"cause":"Diabetes", "year":1999, "runningSum":68399.0, "count":68399}, {"cause":"Heart disease", "year":1999, "runningSum":725192.0, "count":725192}, {"cause":"Influenza and pneumonia", "year":1999, "runningSum":63730.0, "count":63730}, {"cause":"Kidney disease", "year":1999, "runningSum":35525.0, "count":35525}, {"cause":"Stroke", "year":1999, "runningSum":167366.0, "count":167366}, {"cause":"Suicide", "year":1999, "runningSum":29199.0, "count":29199}, {"cause":"Unintentional injuries", "year":1999, "runningSum":97860.0, "count":97860}, {"cause":"Alzheimer's disease", "year":2000, "runningSum":94094.0, "count":49558}, {"cause":"Cancer", "year":2000, "runningSum":1102929.0, "count":553091}, {"cause":"CLRD", "year":2000, "runningSum":246190.0, "count":122009}, {"cause":"Diabetes", "year":2000, "runningSum":137700.0, "count":69301}, {"cause":"Heart disease", "year":2000, "runningSum":1435952.0, "count":710760}, {"cause":"Influenza and pneumonia", "year":2000, "runningSum":129043.0, "count":65313}, {"cause":"Kidney disease", "year":2000, "runningSum":72776.0, "count":37251}, {"cause":"Stroke", "year":2000, "runningSum":335027.0, "count":167661}, {"cause":"Suicide", "year":2000, "runningSum":58549.0, "count":29350}, {"cause":"Unintentional injuries", "year":2000, "runningSum":195760.0, "count":97900}, {"cause":"Alzheimer's disease", "year":2001, "runningSum":147946.0, "count":53852}, {"cause":"Cancer", "year":2001, "runningSum":1656697.0, "count":553768}, {"cause":"CLRD", "year":2001, "runningSum":369203.0, "count":123013}, {"cause":"Diabetes", "year":2001, "runningSum":209072.0, "count":71372}, {"cause":"Heart disease", "year":2001, "runningSum":2136094.0, "count":700142}, {"cause":"Influenza and pneumonia", "year":2001, "runningSum":191077.0, "count":62034}, {"cause":"Kidney disease", "year":2001, "runningSum":112256.0, "count":39480}, {"cause":"Stroke", "year":2001, "runningSum":498565.0, "count":163538}, {"cause":"Suicide", "year":2001, "runningSum":89171.0, "count":30622}, {"cause":"Unintentional injuries", "year":2001, "runningSum":297297.0, "count":101537}, {"cause":"Alzheimer's disease", "year":2002, "runningSum":206812.0, "count":58866}, {"cause":"Cancer", "year":2002, "runningSum":2213968.0, "count":557271}, {"cause":"CLRD", "year":2002, "runningSum":494019.0, "count":124816}, {"cause":"Diabetes", "year":2002, "runningSum":282321.0, "count":73249}, {"cause":"Heart disease", "year":2002, "runningSum":2833041.0, "count":696947}, {"cause":"Influenza and pneumonia", "year":2002, "runningSum":256758.0, "count":65681}, {"cause":"Kidney disease", "year":2002, "runningSum":153230.0, "count":40974}, {"cause":"Stroke", "year":2002, "runningSum":661237.0, "count":162672}, {"cause":"Suicide", "year":2002, "runningSum":120826.0, "count":31655}, {"cause":"Unintentional injuries", "year":2002, "runningSum":404039.0, "count":106742}, {"cause":"Alzheimer's disease", "year":2003, "runningSum":270269.0, "count":63457}, {"cause":"Cancer", "year":2003, "runningSum":2770870.0, "count":556902}, {"cause":"CLRD", "year":2003, "runningSum":620401.0, "count":126382}, {"cause":"Diabetes", "year":2003, "runningSum":356540.0, "count":74219}, {"cause":"Heart disease", "year":2003, "runningSum":3518130.0, "count":685089}, {"cause":"Influenza and pneumonia", "year":2003, "runningSum":321921.0, "count":65163}, {"cause":"Kidney disease", "year":2003, "runningSum":195683.0, "count":42453}, {"cause":"Stroke", "year":2003, "runningSum":818926.0, "count":157689}, {"cause":"Suicide", "year":2003, "runningSum":152310.0, "count":31484}, {"cause":"Unintentional injuries", "year":2003, "runningSum":513316.0, "count":109277}, {"cause":"Alzheimer's disease", "year":2004, "runningSum":336234.0, "count":65965}, {"cause":"Cancer", "year":2004, "runningSum":3324758.0, "count":553888}, {"cause":"CLRD", "year":2004, "runningSum":742388.0, "count":121987}, {"cause":"Diabetes", "year":2004, "runningSum":429678.0, "count":73138}, {"cause":"Heart disease", "year":2004, "runningSum":4170616.0, "count":652486}, {"cause":"Influenza and pneumonia", "year":2004, "runningSum":381585.0, "count":59664}, {"cause":"Kidney disease", "year":2004, "runningSum":238163.0, "count":42480}, {"cause":"Stroke", "year":2004, "runningSum":969000.0, "count":150074}, {"cause":"Suicide", "year":2004, "runningSum":184749.0, "count":32439}, {"cause":"Unintentional injuries", "year":2004, "runningSum":625328.0, "count":112012}, {"cause":"Alzheimer's disease", "year":2005, "runningSum":407833.0, "count":71599}, {"cause":"Cancer", "year":2005, "runningSum":3884070.0, "count":559312}, {"cause":"CLRD", "year":2005, "runningSum":873321.0, "count":130933}, {"cause":"Diabetes", "year":2005, "runningSum":504797.0, "count":75119}, {"cause":"Heart disease", "year":2005, "runningSum":4822707.0, "count":652091}, {"cause":"Influenza and pneumonia", "year":2005, "runningSum":444586.0, "count":63001}, {"cause":"Kidney disease", "year":2005, "runningSum":282064.0, "count":43901}, {"cause":"Stroke", "year":2005, "runningSum":1112579.0, "count":143579}, {"cause":"Suicide", "year":2005, "runningSum":217386.0, "count":32637}, {"cause":"Unintentional injuries", "year":2005, "runningSum":743137.0, "count":117809}, {"cause":"Alzheimer's disease", "year":2006, "runningSum":480265.0, "count":72432}, {"cause":"Cancer", "year":2006, "runningSum":4443958.0, "count":559888}, {"cause":"CLRD", "year":2006, "runningSum":997904.0, "count":124583}, {"cause":"Diabetes", "year":2006, "runningSum":577246.0, "count":72449}, {"cause":"Heart disease", "year":2006, "runningSum":5454343.0, "count":631636}, {"cause":"Influenza and pneumonia", "year":2006, "runningSum":500912.0, "count":56326}, {"cause":"Kidney disease", "year":2006, "runningSum":327408.0, "count":45344}, {"cause":"Stroke", "year":2006, "runningSum":1249698.0, "count":137119}, {"cause":"Suicide", "year":2006, "runningSum":250686.0, "count":33300}, {"cause":"Unintentional injuries", "year":2006, "runningSum":864736.0, "count":121599}, {"cause":"Alzheimer's disease", "year":2007, "runningSum":554897.0, "count":74632}, {"cause":"Cancer", "year":2007, "runningSum":5006833.0, "count":562875}, {"cause":"CLRD", "year":2007, "runningSum":1125828.0, "count":127924}, {"cause":"Diabetes", "year":2007, "runningSum":648628.0, "count":71382}, {"cause":"Heart disease", "year":2007, "runningSum":6070410.0, "count":616067}, {"cause":"Influenza and pneumonia", "year":2007, "runningSum":553629.0, "count":52717}, {"cause":"Kidney disease", "year":2007, "runningSum":373856.0, "count":46448}, {"cause":"Stroke", "year":2007, "runningSum":1385650.0, "count":135952}, {"cause":"Suicide", "year":2007, "runningSum":285284.0, "count":34598}, {"cause":"Unintentional injuries", "year":2007, "runningSum":988442.0, "count":123706}, {"cause":"Alzheimer's disease", "year":2008, "runningSum":637332.0, "count":82435}, {"cause":"Cancer", "year":2008, "runningSum":5572302.0, "count":565469}, {"cause":"CLRD", "year":2008, "runningSum":1266918.0, "count":141090}, {"cause":"Diabetes", "year":2008, "runningSum":719181.0, "count":70553}, {"cause":"Heart disease", "year":2008, "runningSum":6687238.0, "count":616828}, {"cause":"Influenza and pneumonia", "year":2008, "runningSum":609913.0, "count":56284}, {"cause":"Kidney disease", "year":2008, "runningSum":422093.0, "count":48237}, {"cause":"Stroke", "year":2008, "runningSum":1519798.0, "count":134148}, {"cause":"Suicide", "year":2008, "runningSum":321319.0, "count":36035}, {"cause":"Unintentional injuries", "year":2008, "runningSum":1110344.0, "count":121902}, {"cause":"Alzheimer's disease", "year":2009, "runningSum":716335.0, "count":79003}, {"cause":"Cancer", "year":2009, "runningSum":6139930.0, "count":567628}, {"cause":"CLRD", "year":2009, "runningSum":1404271.0, "count":137353}, {"cause":"Diabetes", "year":2009, "runningSum":787886.0, "count":68705}, {"cause":"Heart disease", "year":2009, "runningSum":7286651.0, "count":599413}, {"cause":"Influenza and pneumonia", "year":2009, "runningSum":663605.0, "count":53692}, {"cause":"Kidney disease", "year":2009, "runningSum":471028.0, "count":48935}, {"cause":"Stroke", "year":2009, "runningSum":1648640.0, "count":128842}, {"cause":"Suicide", "year":2009, "runningSum":358228.0, "count":36909}, {"cause":"Unintentional injuries", "year":2009, "runningSum":1228365.0, "count":118021}, {"cause":"Alzheimer's disease", "year":2010, "runningSum":799829.0, "count":83494}, {"cause":"Cancer", "year":2010, "runningSum":6714673.0, "count":574743}, {"cause":"CLRD", "year":2010, "runningSum":1542351.0, "count":138080}, {"cause":"Diabetes", "year":2010, "runningSum":856957.0, "count":69071}, {"cause":"Heart disease", "year":2010, "runningSum":7884340.0, "count":597689}, {"cause":"Influenza and pneumonia", "year":2010, "runningSum":713702.0, "count":50097}, {"cause":"Kidney disease", "year":2010, "runningSum":521504.0, "count":50476}, {"cause":"Stroke", "year":2010, "runningSum":1778116.0, "count":129476}, {"cause":"Suicide", "year":2010, "runningSum":396592.0, "count":38364}, {"cause":"Unintentional injuries", "year":2010, "runningSum":1349224.0, "count":120859}, {"cause":"Alzheimer's disease", "year":2011, "runningSum":884803.0, "count":84974}, {"cause":"Cancer", "year":2011, "runningSum":7291364.0, "count":576691}, {"cause":"CLRD", "year":2011, "runningSum":1685294.0, "count":142943}, {"cause":"Diabetes", "year":2011, "runningSum":930788.0, "count":73831}, {"cause":"Heart disease", "year":2011, "runningSum":8480917.0, "count":596577}, {"cause":"Influenza and pneumonia", "year":2011, "runningSum":767528.0, "count":53826}, {"cause":"Kidney disease", "year":2011, "runningSum":567095.0, "count":45591}, {"cause":"Stroke", "year":2011, "runningSum":1907048.0, "count":128932}, {"cause":"Suicide", "year":2011, "runningSum":436110.0, "count":39518}, {"cause":"Unintentional injuries", "year":2011, "runningSum":1475662.0, "count":126438}, {"cause":"Alzheimer's disease", "year":2012, "runningSum":968440.0, "count":83637}, {"cause":"Cancer", "year":2012, "runningSum":7873987.0, "count":582623}, {"cause":"CLRD", "year":2012, "runningSum":1828783.0, "count":143489}, {"cause":"Diabetes", "year":2012, "runningSum":1004720.0, "count":73932}, {"cause":"Heart disease", "year":2012, "runningSum":9080628.0, "count":599711}, {"cause":"Influenza and pneumonia", "year":2012, "runningSum":818164.0, "count":50636}, {"cause":"Kidney disease", "year":2012, "runningSum":612717.0, "count":45622}, {"cause":"Stroke", "year":2012, "runningSum":2035594.0, "count":128546}, {"cause":"Suicide", "year":2012, "runningSum":476710.0, "count":40600}, {"cause":"Unintentional injuries", "year":2012, "runningSum":1603454.0, "count":127792}, {"cause":"Alzheimer's disease", "year":2013, "runningSum":1053207.0, "count":84767}, {"cause":"Cancer", "year":2013, "runningSum":8458868.0, "count":584881}, {"cause":"CLRD", "year":2013, "runningSum":1977988.0, "count":149205}, {"cause":"Diabetes", "year":2013, "runningSum":1080298.0, "count":75578}, {"cause":"Heart disease", "year":2013, "runningSum":9691733.0, "count":611105}, {"cause":"Influenza and pneumonia", "year":2013, "runningSum":875143.0, "count":56979}, {"cause":"Kidney disease", "year":2013, "runningSum":659829.0, "count":47112}, {"cause":"Stroke", "year":2013, "runningSum":2164572.0, "count":128978}, {"cause":"Suicide", "year":2013, "runningSum":517859.0, "count":41149}, {"cause":"Unintentional injuries", "year":2013, "runningSum":1734011.0, "count":130557}, {"cause":"Alzheimer's disease", "year":2014, "runningSum":1146748.0, "count":93541}, {"cause":"Cancer", "year":2014, "runningSum":9050568.0, "count":591700}, {"cause":"CLRD", "year":2014, "runningSum":2125089.0, "count":147101}, {"cause":"Diabetes", "year":2014, "runningSum":1156786.0, "count":76488}, {"cause":"Heart disease", "year":2014, "runningSum":10306081.0, "count":614348}, {"cause":"Influenza and pneumonia", "year":2014, "runningSum":930370.0, "count":55227}, {"cause":"Kidney disease", "year":2014, "runningSum":707975.0, "count":48146}, {"cause":"Stroke", "year":2014, "runningSum":2297675.0, "count":133103}, {"cause":"Suicide", "year":2014, "runningSum":560685.0, "count":42826}, {"cause":"Unintentional injuries", "year":2014, "runningSum":1869939.0, "count":135928}, {"cause":"Alzheimer's disease", "year":2015, "runningSum":1257309.0, "count":110561}, {"cause":"Cancer", "year":2015, "runningSum":9646498.0, "count":595930}, {"cause":"CLRD", "year":2015, "runningSum":2280130.0, "count":155041}, {"cause":"Diabetes", "year":2015, "runningSum":1236321.0, "count":79535}, {"cause":"Heart disease", "year":2015, "runningSum":10939923.0, "count":633842}, {"cause":"Influenza and pneumonia", "year":2015, "runningSum":987432.0, "count":57062}, {"cause":"Kidney disease", "year":2015, "runningSum":757934.0, "count":49959}, {"cause":"Stroke", "year":2015, "runningSum":2437998.0, "count":140323}, {"cause":"Suicide", "year":2015, "runningSum":604878.0, "count":44193}, {"cause":"Unintentional injuries", "year":2015, "runningSum":2016510.0, "count":146571}, {"cause":"Alzheimer's disease", "year":2016, "runningSum":1373412.0, "count":116103}, {"cause":"Cancer", "year":2016, "runningSum":10244536.0, "count":598038}, {"cause":"CLRD", "year":2016, "runningSum":2434726.0, "count":154596}, {"cause":"Diabetes", "year":2016, "runningSum":1316379.0, "count":80058}, {"cause":"Heart disease", "year":2016, "runningSum":11575183.0, "count":635260}, {"cause":"Influenza and pneumonia", "year":2016, "runningSum":1038969.0, "count":51537}, {"cause":"Kidney disease", "year":2016, "runningSum":807980.0, "count":50046}, {"cause":"Stroke", "year":2016, "runningSum":2580140.0, "count":142142}, {"cause":"Suicide", "year":2016, "runningSum":649843.0, "count":44965}, {"cause":"Unintentional injuries", "year":2016, "runningSum":2177884.0, "count":161374}]
+      filteredData = barData.filter(function(d){return d.year==currentYear})
+      var allYears = d3.range(1999, 2017);
+
+      d3.select("#yearFilter")
+        .selectAll('myOptions')
+        .data(allYears)
+        .enter()
+        .append('option')
+        .text(function (d) { return d; }) // text showed in the menu
+        .attr("value", function (d) { return d; })
+        .attr("selected", function (d) { return d == currentYear; })
+
+      var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+      barSvgCount = d3.select("#death-bar-count")
+      .append("svg")
+      .attr("id", "barchart")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      var xdomain = [
+        "Alzheimer's disease",
+        "Cancer",
+        "CLRD",
+        "Diabetes",
+        "Heart disease",
+        "Influenza and pneumonia",
+        "Kidney disease",
+        "Stroke",
+        "Suicide",
+        "Unintentional injuries"
+      ]
+      var bxs = d3.scaleBand().domain(xdomain).range([0, width])
+      var maxCount = Math.max(...filteredData.map(function(d) { return d.count }));
+      bysCount = d3.scaleLinear().domain([0,maxCount]).range([height, 0])
+
+      barSvgCount.
+          append("g").
+          attr("id", "bar-y-axis-count").
+          attr("transform", `translate(0,0)`).
+          attr("fill", "none").
+          attr("font-size", 10).
+          attr("font-family", "sans-serif").
+          attr("text-anchor", "end").
+          call(d3.axisLeft(bysCount));
+
+      barSvgCount.
+        selectAll("rect").
+        data(filteredData).
+        enter().
+        append("rect").
+        attr("x", function(d,i) {return bxs(d.cause);}).
+        attr("width", function(d, i) { return bxs.bandwidth()}).
+        style("fill", "rgb(95, 0, 0)").
+        style("stroke", "white").
+        attr("y", function(d,i) { return height;}).
+        attr("height", function(d, i){ return 0;})
+        .on("mouseover", function(d, i) {
+          tooltip.text("")
+          tooltip.transition()
+            .duration(200)
+            .style("opacity", .9);
+
+          tooltip.style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px")
+
+          tooltip.append("p").text(`Year: ${currentYear}`)
+            .append("p").text(`Cause of Death: ${d.cause}`)
+            .append("p").text(`Death Count for Year ${currentYear}: ${d.count.toLocaleString()}`)
+            .append("p").text(`Cumulative Death Count from 1999 to ${currentYear}: ${d.runningSum.toLocaleString()}`)
+        })
+        .on("mouseleave", function(){
+          tooltip
+            .transition().duration(200)
+            .style("opacity", 0)
+        }).
+        transition().duration(1000).ease(d3.easeLinear).
+        attr("y", function(d,i) { return bysCount(d.count);}).
+        attr("height", function(d, i){ return height - bysCount(d.count);})
+
+      barSvgCount.
+        append("g").
+        attr("transform", `translate(0,${height})`).
+        attr("fill", "none").
+        attr("font-size", 10).
+        attr("font-family", "sans-serif").
+        attr("text-anchor", "end").
+        call(d3.axisBottom(bxs)).
+        selectAll("text").
+        style("text-anchor", "end").
+        attr("dx", "-.8em").
+        attr("dy", ".15em").
+        attr("transform", "rotate(-90)")
+
+      barSvgCummulativeCount = d3.select("#death-bar-cummulative-count")
+      .append("svg")
+      .attr("id", "barchart")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+      var xdomain = [
+        "Alzheimer's disease",
+        "Cancer",
+        "CLRD",
+        "Diabetes",
+        "Heart disease",
+        "Influenza and pneumonia",
+        "Kidney disease",
+        "Stroke",
+        "Suicide",
+        "Unintentional injuries"
+      ]
+      var bxs = d3.scaleBand().domain(xdomain).range([0, width])
+      var maxCCount = Math.max(...filteredData.map(function(d) { return d.runningSum }));
+      bysCummulativeCount = d3.scaleLinear().domain([0,maxCCount]).range([height, 0])
+
+      barSvgCummulativeCount.
+          append("g").
+          attr("id", "bar-y-axis-c-count").
+          attr("transform", `translate(0,0)`).
+          attr("fill", "none").
+          attr("font-size", 10).
+          attr("font-family", "sans-serif").
+          attr("text-anchor", "end").
+          call(d3.axisLeft(bysCummulativeCount));
+
+      barSvgCummulativeCount.
+        selectAll("rect").
+        data(filteredData).
+        enter().
+        append("rect").
+        attr("x", function(d,i) {return bxs(d.cause);}).
+        attr("width", function(d, i) { return bxs.bandwidth()}).
+        style("fill", "rgb(95, 0, 0)").
+        style("stroke", "white").
+        attr("y", function(d,i) { return height;}).
+        attr("height", function(d, i){ return 0;})
+        .on("mouseover", function(d, i) {
+          tooltip.text("")
+          tooltip.transition()
+            .duration(200)
+            .style("opacity", .9);
+
+          tooltip.style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px")
+
+          tooltip.append("p").text(`Year: ${currentYear}`)
+            .append("p").text(`Cause of Death: ${d.cause}`)
+            .append("p").text(`Death Count for Year ${currentYear}: ${d.count.toLocaleString()}`)
+            .append("p").text(`Cumulative Death Count from 1999 to ${currentYear}: ${d.runningSum.toLocaleString()}`)
+        })
+        .on("mouseleave", function(){
+          tooltip
+            .transition().duration(200)
+            .style("opacity", 0)
+        }).
+        transition().duration(1000).ease(d3.easeLinear).
+        attr("y", function(d,i) { return bysCummulativeCount(d.runningSum);}).
+        attr("height", function(d, i){ return height - bysCummulativeCount(d.runningSum);})
+
+      barSvgCummulativeCount.
+        append("g").
+        attr("transform", `translate(0,${height})`).
+        attr("fill", "none").
+        attr("font-size", 10).
+        attr("font-family", "sans-serif").
+        attr("text-anchor", "end").
+        call(d3.axisBottom(bxs)).
+        selectAll("text").
+        style("text-anchor", "end").
+        attr("dx", "-.8em").
+        attr("dy", ".15em").
+        attr("transform", "rotate(-90)")
+    }
+
+    d3.select("#yearFilter").on("change", function(d) {
+      currentYear = d3.select(this).property("value")
+      document.getElementById("barchart-c-count-header").textContent = `Total deaths in US by Cause (1998 - ${currentYear})`
+      document.getElementById("barchart-count-header").textContent = `Total deaths in US by Cause (${currentYear})`
+
+      filteredData = barData.filter(function(d){return d.year==currentYear})
+      var maxCCount = Math.max(...filteredData.map(function(d) { return d.runningSum }));
+      bysCummulativeCount = d3.scaleLinear().domain([0,maxCCount]).range([height, 0])
+
+      d3.select("#bar-y-axis-c-count").remove()
+      barSvgCummulativeCount.append("g")
+        .attr("fill", "none")
+        .attr("id", "bar-y-axis-c-count")
+        .attr("font-size", 10)
+        .attr("font-family", "sans-serif")
+        .attr("text-anchor", "end")
+        .call(d3.axisLeft(bysCummulativeCount));
+
+      barSvgCummulativeCount
+        .selectAll("rect")
+        .data(filteredData)
+        .transition()
+        .duration(1000)
+        .attr("y", function(d,i) { return bysCummulativeCount(d.runningSum);})
+        .attr("height", function(d, i){ return height - bysCummulativeCount(d.runningSum);})
+
+      var maxCount = Math.max(...filteredData.map(function(d) { return d.count }));
+      bysCount = d3.scaleLinear().domain([0,maxCount]).range([height, 0])
+
+      d3.select("#bar-y-axis-count").remove()
+      barSvgCount.append("g")
+        .attr("fill", "none")
+        .attr("id", "bar-y-axis-count")
+        .attr("font-size", 10)
+        .attr("font-family", "sans-serif")
+        .attr("text-anchor", "end")
+        .call(d3.axisLeft(bysCount));
+
+      barSvgCount
+        .selectAll("rect")
+        .data(filteredData)
+        .transition()
+        .duration(1000)
+        .attr("y", function(d,i) { return bysCount(d.count);})
+        .attr("height", function(d, i){ return height - bysCount(d.count);})
+    })
+
+    setupBarChart()
+  </script>
+</html>
