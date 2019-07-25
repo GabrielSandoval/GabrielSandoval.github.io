@@ -2,11 +2,10 @@
 <html lang="en">
   <head>
     <title> Gabriel Sandoval </title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
     <script src="js/d3.min.js"></script>
     <style>
-      rect:hover {
-        fill-opacity: .7;
-      }
       div.tooltip {
         position: absolute;
         text-align: left;
@@ -21,22 +20,55 @@
         border-radius: 8px;
         pointer-events: none;
       }
+
+      rect:hover {
+        fill-opacity: .7;
+      }
     </style>
   </head>
   <body>
-    <h1 id='barchart-count-header'> Total deaths in US by Cause (2016) </h1>
-    <div id="death-bar-count"></div>
+    <div class="wrapper">
+      <div class="container">
+        <div class="descriptions">
+          <p>
+            Nam placerat lobortis ullamcorper. Vivamus pharetra feugiat nibh, quis blandit diam lacinia maximus. Nullam ut dolor et libero efficitur vehicula. Suspendisse cursus nisi in hendrerit eleifend. Nulla elit ex, tempus at est vitae, aliquam rhoncus arcu.
+          </p>
+          <p>
+            Curabitur gravida, ligula at dictum scelerisque, libero neque pretium nisi, id bibendum enim ante in dolor.
+          </p>
+        </div>
+        <div id="death-bar-count" class="chart">
+          <h3 id='barchart-count-header'> Death Count in US by Cause (2016) </h1>
+        </div>
+      </div>
+      <div class="container">
+        <div id="death-bar-cummulative-count" class="chart">
+          <h3 id='barchart-c-count-header'> Cummulative Death Count in US by Cause (1998 - 2016) </h1>
+        </div>
+        <div class="descriptions">
+          <p>
+            Nam placerat lobortis ullamcorper. Vivamus pharetra feugiat nibh, quis blandit diam lacinia maximus. Nullam ut dolor et libero efficitur vehicula. Suspendisse cursus nisi in hendrerit eleifend. Nulla elit ex, tempus at est vitae, aliquam rhoncus arcu.
+          </p>
+          <p>
+            Curabitur gravida, ligula at dictum scelerisque, libero neque pretium nisi, id bibendum enim ante in dolor.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="filter">
+      <h4> Filter by: </h4>
+      <p> Year </p>
+      <select id="yearFilter"></select>
 
-    <h1 id='barchart-c-count-header'> Total deaths in US by Cause (1998 - 2016) </h1>
-    <div id="death-bar-cummulative-count"></div>
-    <div class="pure-u-24-24">
-      <select id="yearFilter">
+      <div class="navigation">
+        <a href="linechart.html"> View Death Count and Rate Relationship</a>
+      </div>
     </div>
   </body>
   <script>
     function setupBarChart(){
       margin = {top: 10, right: 30, bottom: 120, left: 60}
-      width = 500 - margin.left - margin.right,
+      width = 600 - margin.left - margin.right,
       height = 400 - margin.top - margin.bottom;
 
       currentYear = 2016;
