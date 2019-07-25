@@ -1,5 +1,9 @@
-h3 {
+h3, h2 {
   text-align: center;
+}
+
+p {
+  line-height: 2;
 }
 
 .wrapper {
@@ -16,6 +20,19 @@ h3 {
   height: 100%;
   border-left: solid 1px black;
   border-bottom: solid 1px black;
+  background-color: white;
+}
+
+.filter-buttons {
+  height: 20%;
+}
+
+.main-caption {
+  height: 70%;
+}
+
+.main-caption p {
+  transform: translate(0, 50%);
 }
 
 .filter p {
@@ -23,8 +40,9 @@ h3 {
 }
 
 .navigation {
-  bottom: 10%;
-  position: absolute;
+  height: 10%;
+  display: flex;
+  justify-content: space-around;
 }
 
 .container {

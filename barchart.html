@@ -38,12 +38,12 @@
           </p>
         </div>
         <div id="death-bar-count" class="chart">
-          <h3 id='barchart-count-header'> Death Count in US by Cause (2016) </h1>
+          <h3 id='barchart-count-header'> Death Counts in US (2016) </h1>
         </div>
       </div>
       <div class="container">
         <div id="death-bar-cummulative-count" class="chart">
-          <h3 id='barchart-c-count-header'> Cummulative Death Count in US by Cause (1998 - 2016) </h1>
+          <h3 id='barchart-c-count-header'> Cumulative Death Counts in US (1998 - 2016) </h1>
         </div>
         <div class="descriptions">
           <p>
@@ -56,12 +56,18 @@
       </div>
     </div>
     <div class="filter">
-      <h4> Filter by: </h4>
-      <p> Year </p>
-      <select id="yearFilter"></select>
-
+      <div class="filter-buttons">
+        <h4> Filter by: </h4>
+        <p> Year </p>
+        <select id="yearFilter"></select>
+      </div>
+      <div class="main-caption">
+        <p>
+          Nam placerat lobortis ullamcorper. Vivamus pharetra feugiat nibh, quis blandit diam lacinia maximus. Nullam ut dolor et libero efficitur vehicula. Suspendisse cursus nisi in hendrerit eleifend. Nulla elit ex, tempus at est vitae, aliquam rhoncus arcu.
+        </p>
+      </div>
       <div class="navigation">
-        <a href="linechart.html"> View Death Count and Rate Relationship</a>
+        <a href="linechart.html" class="next"> Next </a>
       </div>
     </div>
   </body>
@@ -142,12 +148,11 @@
             .style("opacity", .9);
 
           tooltip.style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 28) + "px")
+            .style("top", (d3.event.pageY) + "px")
 
           tooltip.append("p").text(`Year: ${currentYear}`)
             .append("p").text(`Cause of Death: ${d.cause}`)
-            .append("p").text(`Death Count for Year ${currentYear}: ${d.count.toLocaleString()}`)
-            .append("p").text(`Cumulative Death Count from 1999 to ${currentYear}: ${d.runningSum.toLocaleString()}`)
+            .append("p").text(`Death Count at Year ${currentYear}: ${d.count.toLocaleString()}`)
         })
         .on("mouseleave", function(){
           tooltip
@@ -224,11 +229,10 @@
             .style("opacity", .9);
 
           tooltip.style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 28) + "px")
+            .style("top", (d3.event.pageY) + "px")
 
           tooltip.append("p").text(`Year: ${currentYear}`)
             .append("p").text(`Cause of Death: ${d.cause}`)
-            .append("p").text(`Death Count for Year ${currentYear}: ${d.count.toLocaleString()}`)
             .append("p").text(`Cumulative Death Count from 1999 to ${currentYear}: ${d.runningSum.toLocaleString()}`)
         })
         .on("mouseleave", function(){
@@ -257,8 +261,8 @@
 
     d3.select("#yearFilter").on("change", function(d) {
       currentYear = d3.select(this).property("value")
-      document.getElementById("barchart-c-count-header").textContent = `Total deaths in US by Cause (1998 - ${currentYear})`
-      document.getElementById("barchart-count-header").textContent = `Total deaths in US by Cause (${currentYear})`
+      document.getElementById("barchart-c-count-header").textContent = `Cumulative Death Counts in US (1998 - ${currentYear})`
+      document.getElementById("barchart-count-header").textContent = `Death Counts in US (${currentYear})`
 
       filteredData = barData.filter(function(d){return d.year==currentYear})
       var maxCCount = Math.max(...filteredData.map(function(d) { return d.runningSum }));
