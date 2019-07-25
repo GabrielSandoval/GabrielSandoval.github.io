@@ -7,7 +7,7 @@ p {
 }
 
 .wrapper {
-  width: 85%;
+  width: 70%;
   padding: 10px;
 }
 
@@ -33,6 +33,7 @@ p {
 
 .main-caption p {
   transform: translate(0, 50%);
+  padding: 0 10px;
 }
 
 .filter p {
@@ -45,8 +46,15 @@ p {
   justify-content: space-around;
 }
 
+.center-nav {
+  height: 100%;
+  transform: translate(50%, 50%);
+}
+
 .container {
   display: flex;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .descriptions {
@@ -54,4 +62,3 @@ p {
   text-align: center;
   margin: auto 20px;
 }
-

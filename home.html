@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title> Gabriel Sandoval </title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <style type="text/css">
+      path:hover {
+        fill-opacity: .7;
+      }
+
+      div.tooltip {
+        position: absolute;
+        text-align: left;
+        width: 200px;
+        height: 170px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        font: 12px sans-serif;
+        background: #fee467;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+      }
+
+      .container {
+        transform: translate(10%,0);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="container">
+        <h2 id="geochart-rate-header"></h2>
+        <div class="main-caption">
+          <p>
+            This dataset presents the age-adjusted death rates for the 10 leading causes of death in the United States beginning in 1999.</br>
+
+            Data are based on information from all resident death certificates filed in the 50 states and the District of Columbia using demographic and medical characteristics. Age-adjusted death rates (per 100,000 population) are based on the 2000 U.S. standard population. Populations used for computing death rates after 2010 are postcensal estimates based on the 2010 census, estimated as of July 1, 2010. Rates for census years are based on populations enumerated in the corresponding censuses. Rates for non-census years before 2010 are revised using updated intercensal population estimates and may differ from rates previously published.</br>
+
+            Causes of death classified by the International Classification of Diseases, Tenth Revision (ICD\u201310) are ranked according to the number of deaths assigned to rankable causes.</br>
+
+            Cause of death statistics are based on the underlying cause of death.</br>
+
+            SOURCES<br />CDC/NCHS, National Vital Statistics System, mortality data (see <a href=\"http://www.cdc.gov/nchs/deaths.htm\">http://www.cdc.gov/nchs/deaths.htm</a>); and CDC WONDER (see <a href=\"http://wonder.cdc.gov\">http://wonder.cdc.gov</a>).</br>
+
+            REFERENCES
+          </p>
+        </div>
+      </div>
+      <div class="filter">
+        <div class="center-nav">
+          <a href="geochartCount.html" class="next"> Next </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
