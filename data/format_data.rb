@@ -31,3 +31,6 @@ rows.map do |cause, state, rate, rank, count|
     count: count.split(",").join.to_i,
   }
 end
+
+rows = CSV.parse(open("geocaption.csv"))
+rows.to_h

@@ -7,7 +7,7 @@ p {
 }
 
 .wrapper {
-  width: 70%;
+  width: 60%;
   padding: 10px;
 }
 
@@ -15,7 +15,7 @@ p {
   position: fixed;
   right: 0;
   top: 0;
-  width: 20%;
+  width: 30%;
   padding: 10px;
   height: 100%;
   border-left: solid 1px black;
@@ -27,13 +27,11 @@ p {
   height: 20%;
 }
 
-.main-caption {
+#main-caption {
   height: 70%;
-}
-
-.main-caption p {
-  transform: translate(0, 50%);
-  padding: 0 10px;
+  padding: 0 10%;
+  line-height: 2.5;
+  text-align: center;
 }
 
 .filter p {
@@ -61,4 +59,21 @@ p {
   width: 30%;
   text-align: center;
   margin: auto 20px;
+}
+
+#top-state {
+  animation: highlight 1s linear;
+  animation-delay: 1s;
+}
+
+.top-cause {
+  animation: highlight 1.3s linear;
+  animation-delay: 1.5s;
+}
+
+@keyframes highlight {
+  0%  { opacity: 1; }
+ 25% { opacity: 0.3; }
+ 50% { opacity: 1; }
+ 75% { opacity: 0.3; }
 }

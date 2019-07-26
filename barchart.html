@@ -61,7 +61,7 @@
         <p> Year </p>
         <select id="yearFilter"></select>
       </div>
-      <div class="main-caption">
+      <div id="main-caption">
         <p>
           Nam placerat lobortis ullamcorper. Vivamus pharetra feugiat nibh, quis blandit diam lacinia maximus. Nullam ut dolor et libero efficitur vehicula. Suspendisse cursus nisi in hendrerit eleifend. Nulla elit ex, tempus at est vitae, aliquam rhoncus arcu.
         </p>
@@ -85,7 +85,7 @@
     }
     function setupBarChart(){
       margin = {top: 10, right: 30, bottom: 120, left: 60}
-      width = 600 - margin.left - margin.right,
+      width = 500 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
       currentYear = 2016;
@@ -141,6 +141,20 @@
         style("stroke", "white").
         attr("y", function(d,i) { return height;}).
         attr("height", function(d, i){ return 0;})
+        .attr("class", function(d) {
+          if(d.cause == xdomain[0]){
+            return "top-cause"
+          } else {
+            return ""
+          }
+        })
+        .attr("id", function(d) {
+          if(d.cause == xdomain[0]){
+            return "top-cause-count"
+          } else {
+            return ""
+          }
+        })
         .on("mouseover", function(d, i) {
           tooltip.text("")
           tooltip.transition()
@@ -213,6 +227,20 @@
         style("stroke", "white").
         attr("y", function(d,i) { return height;}).
         attr("height", function(d, i){ return 0;})
+        .attr("class", function(d) {
+          if(d.cause == xdomain[0]){
+            return "top-cause"
+          } else {
+            return ""
+          }
+        })
+        .attr("id", function(d) {
+          if(d.cause == xdomain[0]){
+            return "top-cause-c-count"
+          } else {
+            return ""
+          }
+        })
         .on("mouseover", function(d, i) {
           tooltip.text("")
           tooltip.transition()
@@ -252,6 +280,12 @@
     }
 
     d3.select("#yearFilter").on("change", function(d) {
+      topCauseCount = document.getElementById("top-cause-count")
+      topCauseCount.classList.remove("top-cause")
+
+      topCauseCCount = document.getElementById("top-cause-c-count")
+      topCauseCCount.classList.remove("top-cause")
+
       currentYear = d3.select(this).property("value")
       document.getElementById("barchart-c-count-header").textContent = `Cumulative Death Counts in US (1998 - ${currentYear})`
       document.getElementById("barchart-count-header").textContent = `Death Counts in US (${currentYear})`
@@ -311,6 +345,13 @@
       barSvgCummulativeCount
         .selectAll("rect")
         .data(filteredData)
+        .attr("id", function(d) {
+          if(d.cause == xdomain[0]){
+            return "top-cause-c-count"
+          } else {
+            return ""
+          }
+        })
         .transition()
         .duration(1000)
         .attr("y", function(d,i) { return bysCummulativeCount(d.runningSum);})
@@ -331,10 +372,22 @@
       barSvgCount
         .selectAll("rect")
         .data(filteredData)
+        .attr("id", function(d) {
+          if(d.cause == xdomain[0]){
+            return "top-cause-count"
+          } else {
+            return ""
+          }
+        })
         .transition()
         .duration(1000)
         .attr("y", function(d,i) { return bysCount(d.count);})
         .attr("height", function(d, i){ return height - bysCount(d.count);})
+
+      setTimeout(function(){
+        topCauseCount.classList.add("top-cause")
+        topCauseCCount.classList.add("top-cause")
+      }, 500);
     })
 
     setupBarChart()

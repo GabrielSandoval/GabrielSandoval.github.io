@@ -39,10 +39,11 @@
       </div>
       <div class="filter">
         <div class="filter-buttons">
+          <h4> </h4>
         </div>
-        <div class="main-caption">
+        <div id="main-caption">
           <p>
-            Death counts in the United States is proportional to the population at that state. With California at top 1, followed by Florida, and Texas.
+            Death counts in the United States is proportional to the population at that state. With California being ranked 1, followed by Florida, and Texas.
           </p>
         </div>
         <div class="navigation">
@@ -153,6 +154,13 @@
       .style("opacity", 0)
       .style("fill", function(d) {
         return colorScale(d.properties.rank);
+      })
+      .attr("id", function(d) {
+        if(d.properties.rank == 1){
+          return "top-state"
+        } else {
+          return ""
+        }
       })
       .on("mouseover", function(d) {
         tooltip.text("")
