@@ -62,13 +62,25 @@ p {
 }
 
 #top-state {
-  animation: highlight 1s linear;
+  animation: highlight 0.75s linear;
   animation-delay: 1s;
 }
 
 .top-cause {
-  animation: highlight 1.3s linear;
-  animation-delay: 1.5s;
+  animation: highlight 0.75s linear;
+  animation-delay: 1.3s;
+}
+
+.dot {
+  animation: radius 0.75s linear;
+  animation-delay: 1.3s;
+}
+
+@keyframes radius {
+  0%  { r: 5; }
+ 25% { r: 7; }
+ 50% { r: 5; }
+ 75% { r: 7; }
 }
 
 @keyframes highlight {

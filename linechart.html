@@ -165,6 +165,7 @@
 
       countCircles = countSvg.append("g")
           .selectAll(".dot")
+          .attr("class", "top-stat")
           .data(deathCountPerYear)
           .enter().append("circle") // Uses the enter().append() method
           .attr("class", "dot") // Assign a class for styling
