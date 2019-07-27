@@ -204,11 +204,105 @@
       .transition().duration(1000)
       .style("opacity", 1.0)
 
+    function addAnnotation(currentCauseOfDeath){
+      d3.select("#annotation").remove()
+      switch(currentCauseOfDeath) {
+        case "Cancer":
+          geoSvg
+              .append("g")
+              .attr("id", "annotation")
+              .attr("transform", "translate(550, 350)")
+              .append("circle")
+              .attr("r", 150)
+              .attr("stroke", "black")
+              .attr("fill", "none")
+              .attr("stroke-width", 5)
+          break;
+        case "CLRD":
+          geoSvg
+              .append("g")
+              .attr("id", "annotation")
+              .attr("transform", "translate(120, 200)")
+              .append("rect")
+              .attr("width", 500)
+              .attr("height", 170)
+              .attr("fill", "none")
+              .attr("stroke", "black")
+              .attr("stroke-width", 5)
+          break;
+        case "Diabetes":
+          geoSvg .append("g")
+              .attr("id", "annotation")
+              .attr("transform", "translate(100, 90)")
+              .append("path")
+              .attr("d", "M 50 380 L 140 220 L 380 230 L 500 0")
+              .attr("fill", "none")
+              .attr("stroke", "black")
+              .attr("stroke-width", 5)
+          break;
+        case "Heart disease":
+          geoSvg .append("g")
+              .attr("id", "annotation")
+              .attr("transform", "translate(100, 90)")
+              .append("path")
+              .attr("d", "M 120 400 L 400 0")
+              .attr("fill", "none")
+              .attr("stroke", "black")
+              .attr("stroke-width", 5)
+          break;
+        case "Influenza and pneumonia":
+          geoSvg
+              .append("g")
+              .attr("id", "annotation")
+              .attr("transform", "translate(520, 370)")
+              .append("circle")
+              .attr("r", 120)
+              .attr("stroke", "black")
+              .attr("fill", "none")
+              .attr("stroke-width", 5)
+          break;
+        case "Kidney disease":
+          geoSvg
+              .append("g")
+              .attr("id", "annotation")
+              .attr("transform", "translate(100, 90)")
+              .append("path")
+              .attr("d", "M 130 370 L 500 20")
+              .attr("fill", "none")
+              .attr("stroke", "black")
+              .attr("stroke-width", 5)
+          break;
+        case "Stroke":
+          geoSvg
+              .append("g")
+              .attr("id", "annotation")
+              .attr("transform", "translate(500, 380)")
+              .append("circle")
+              .attr("r", 150)
+              .attr("stroke", "black")
+              .attr("fill", "none")
+              .attr("stroke-width", 5)
+          break;
+        case "Suicide":
+          geoSvg
+              .append("g")
+              .attr("id", "annotation")
+              .attr("transform", "translate(160, 70)")
+              .append("path")
+              .attr("d", "M 170 0 L 150 430")
+              .attr("fill", "none")
+              .attr("stroke", "black")
+              .attr("stroke-width", 5)
+          break;
+      }
+    }
+
     d3.select("#causeFilter").on("change", function(d) {
       topState = document.getElementById("top-state")
       topState.classList.remove("top-state")
 
       currentCauseOfDeath = d3.select(this).property("value")
+      addAnnotation(currentCauseOfDeath)
       document.getElementById("geochart-rate-header").textContent = `US State Ranking by Death Rate (${currentCauseOfDeath})`
       document.getElementById("main-caption").textContent = geoCaption[currentCauseOfDeath]
 
