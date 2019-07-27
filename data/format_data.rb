@@ -34,3 +34,6 @@ end
 
 rows = CSV.parse(open("geocaption.csv"))
 rows.to_h
+
+rows = CSV.parse(open("data/barcountcaption.csv"))
+rows = CSV.parse(open("data/barccountcaption.csv"))
