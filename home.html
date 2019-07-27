@@ -4,12 +4,13 @@
     <title> Gabriel Sandoval </title>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <style type="text/css">
-      h2 {
+      h2, .source-dataset {
         text-align: center;
       }
 
       .container {
         line-height: 1.5;
+        padding: 0 5%;
       }
 
       .subheading {
@@ -30,22 +31,28 @@
   </head>
   <body>
     <div class="wrapper">
-      <h2> Top 10 Leading Cause of Death in the United States </h2>
+      <h1> Top 10 Leading Cause of Death in the United States </h1>
+      </br>
       <div class="container">
         <p class="subheading">
           This dataset presents the age-adjusted death rates for the 10 leading causes of death in the United States beginning in 1999.</br>
         </p>
-        <p>
+        <p class="subheading">
           Data are based on information from all resident death certificates filed in the 50 states and the District of Columbia using demographic and medical characteristics. Age-adjusted death rates (per 100,000 population) are based on the 2000 U.S. standard population. Populations used for computing death rates after 2010 are postcensal estimates based on the 2010 census, estimated as of July 1, 2010. Rates for census years are based on populations enumerated in the corresponding censuses. Rates for non-census years before 2010 are revised using updated intercensal population estimates and may differ from rates previously published.</br>
         </p>
+        <p class="subheading">
           Causes of death classified by the International Classification of Diseases, Tenth Revision (ICD\u201310) are ranked according to the number of deaths assigned to rankable causes.</br>
-        <p>
+        </p>
+        <p class="subheading">
           Cause of death statistics are based on the underlying cause of death.</br>
         </p>
-        <p>
-          SOURCES<br />CDC/NCHS, National Vital Statistics System, mortality data (see <a href=\"http://www.cdc.gov/nchs/deaths.htm\">http://www.cdc.gov/nchs/deaths.htm</a>); and CDC WONDER (see <a href=\"http://wonder.cdc.gov\">http://wonder.cdc.gov</a>).</br>
-        </p>
       </div>
+      </br>
+      <p class="source-dataset">
+        SOURCE DATASET: <a href="https://catalog.data.gov/dataset/age-adjusted-death-rates-for-the-top-10-leading-causes-of-death-united-states-2013"> NCHS - Leading Causes of Death: United States </a>
+      </p>
+      </br>
+      </br>
       <div class="center-nav">
         <a href="geochartCount.html" class="next"> Next </a>
       </div>
